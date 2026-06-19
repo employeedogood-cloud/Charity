@@ -1,0 +1,89 @@
+{
+  "entities": {
+    "TotalStats": {
+      "title": "TotalStats",
+      "description": "Global counters of money and eggs for all synchronized visual widgets.",
+      "type": "object",
+      "properties": {
+        "totalMoney": {
+          "type": "number",
+          "description": "Aggregated sum in RM of direct farm purchases across the workspace"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Firestore server timestamp of latest activity increment"
+        }
+      },
+      "required": ["totalMoney"]
+    },
+    "Donation": {
+      "title": "Donation",
+      "description": "Direct contribution details of a specific donor",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Given display name or Anonymous"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Contribution value in RM"
+        },
+        "eggs": {
+          "type": "number",
+          "description": "Calculated egg quantity supported"
+        },
+        "message": {
+          "type": "string",
+          "description": "Warm greetings left by the contributor"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Firestore server timestamp"
+        }
+      },
+      "required": ["name", "amount", "eggs", "createdAt"]
+    },
+    "DonorPhoto": {
+      "title": "DonorPhoto",
+      "description": "A featured user face or group picture on the Donation Wall",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Supporter display name"
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Unsplash or direct URL profile picture"
+        },
+        "eggCount": {
+          "type": "number",
+          "description": "Represented volume of eggs"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Firestore server timestamp"
+        }
+      },
+      "required": ["name", "imageUrl", "eggCount", "createdAt"]
+    }
+  },
+  "firestore": {
+    "totals/{totalId}": {
+      "schema": "TotalStats",
+      "description": "Single-document aggregated summary for caching high-performance statistics"
+    },
+    "donations/{donationId}": {
+      "schema": "Donation",
+      "description": "Collection of individual contributions"
+    },
+    "donor_photos/{photoId}": {
+      "schema": "DonorPhoto",
+      "description": "Approved donor profile images for the Donation Wall"
+    }
+  }
+}

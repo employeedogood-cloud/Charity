@@ -1,0 +1,6 @@
+{
+  "name": "Egg Donation Charity",
+  "description": "An interactive, beautiful landing page for a charitable organization raising money to distribute fresh eggs to families in need. Features live donation simulators, live distribution counts, embedded YouTube vlogs, a photo wall, and a custom messenger.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

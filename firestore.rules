@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net default catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Input Validation Helpers
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 1. TotalStats rules
+    match /totals/{totalId} {
+      allow get: if true;
+      allow list: if false;
+      
+      // Allow creation/updates to increment total money
+      allow create, update: if (
+        isValidTotalStats(incoming())
+      );
+    }
+
+    function isValidTotalStats(data) {
+      return data.keys().hasAll(['totalMoney', 'updatedAt']) 
+        && data.keys().size() == 2
+        && data.totalMoney is number
+        && data.totalMoney >= 0
+        && data.updatedAt == request.time;
+    }
+
+    // 2. Donation rules (Public live feed)
+    match /donations/{donationId} {
+      allow get, list: if true;
+      
+      allow create: if (
+        isValidDonation(incoming())
+      );
+      allow update, delete: if false; // Donations are immutable once submitted
+    }
+
+    function isValidDonation(data) {
+      return data.keys().hasAll(['name', 'amount', 'eggs', 'createdAt'])
+        && (data.keys().size() == 4 || (data.keys().size() == 5 && data.keys().hasAll(['message'])))
+        && data.name is string
+        && data.name.size() <= 100
+        && data.amount is number
+        && data.amount > 0
+        && data.eggs is number
+        && data.eggs > 0
+        && (!data.keys().hasAll(['message']) || (data.message is string && data.message.size() <= 300))
+        && data.createdAt == request.time;
+    }
+
+    // 3. Donor Photos (WhatsApp/Admin curated, public read)
+    match /donor_photos/{photoId} {
+      allow get, list: if true;
+      allow write: if false; // Safe and secure against spam, managed from Admin Panel / Console
+    }
+  }
+}
