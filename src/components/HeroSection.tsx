@@ -216,7 +216,7 @@ export default function HeroSection({ totalMoney, onAddDonation, eggPrice }: Her
       <div className="absolute top-10 right-10 w-72 h-72 bg-yellow-100/25 rounded-full blur-3xl -z-10 animate-pulse" />
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-yellow-50/40 rounded-full blur-3xl -z-10" />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 ml-[42.5px] mt-0 text-[16px]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-0 text-[16px]">
         
         {/* Top Header Alert - Centered */}
         <div className="flex justify-center mb-5">
